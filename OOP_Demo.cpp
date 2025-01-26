@@ -8,8 +8,6 @@ class Departemen{
         Departemen(string nameDept, string nameChief, int total_member) : nama_dept(nameDept), nama_ketua(nameChief), jml_anggota(total_member){
 
         }
-
-
         string getNameDept(){
             return nama_dept;
         }
