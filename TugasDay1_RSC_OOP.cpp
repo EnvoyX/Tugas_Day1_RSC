@@ -122,10 +122,10 @@ int main(){
                 cout << "Enter element (Pyro, Havoc, Imaginary, etc.): ";
                 getline(cin, element);
 
-                cout << "Enter weapon: ";
+                cout << "Enter weapon (Polearm, Sword, Broadblade, etc): ";
                 getline(cin, weapon);
 
-                cout << "Enter gender: ";
+                cout << "Enter gender (Male/Female): ";
                 getline(cin, gender);
 
                 phoneBook.addContact(name, address, element, weapon, gender);
