@@ -4,87 +4,102 @@
 
 using namespace std;
 
-// Class untuk menyimpan informasi kontak
-class Contact {
-private:
+
+
+class Contact{
+    private:
+    // Informasi-informasi Kontak
     string name;
     string address;
-    string element; // Elemen seperti Pyro, Cryo, dll.
+    string element; 
+    string weapon;
+    string gender;
+    public:
+        // Constructor Contact untuk inisialisasi
+        Contact(string name, string address, string element, string weapon, string gender)   {
 
-public:
-    // Constructor Contact untuk inisialisasi
-    Contact(string name, string address, string element) {
-        this->name = name;
-        this->address = address;
-        this->element = element;
-    }
+            this->name= name;
+            this->address = address;
+            this->element = element;  // Pyro, Havoc, Imaginary, etc.
+            this->weapon = weapon; // Polearm, Sword, Broadblade, etc.
+            this->gender =gender; 
+        }
 
-    // Getter untuk mendapatkan informasi kontak
-    string getName() const {
-        return name;
-    }
+        // Getter untuk mendapatkan informasi kontak
+        string getName() const{
+            return name;
+        }
 
-    void displayInfo() const {
-        cout << "Name: " << name << endl;
-        cout << "Address: " << address << endl;
-        cout << "Element: " << element << endl;
-    }
+        // Display semua informasi kontak
+        void displayInfo() const{
+            cout << "Name: " << name << endl;
+            cout << "Address: " << address << endl;
+            cout << "Element: " << element << endl;
+            cout << "Weapon: " << weapon << endl;
+            cout << "Gender: " << gender << endl;
+        }
 };
 
 // Class PhoneBook untuk menyimpan dan mengelola daftar kontak
-class PhoneBook {
-private:
-    vector<Contact> contacts; // Daftar kontak
-    static const int  maximumContacts = 8; // Maksimal 8 kontak
-
-public:
-    // Menambahkan kontak baru (ADD)
-    void addContact(string name, string address, string element) {
-        if (contacts.size() <  maximumContacts) {
-            contacts.emplace_back(name, address, element); // insert kontak di akhir vektor
-        } else {
-            // Jika sudah penuh, ganti kontak pertama
-            contacts.erase(contacts.begin()); 
-            contacts.emplace_back(name, address, element);
-        }
-        cout << "Contact added successfully!\n";
-    }
-
-    // Menampilkan semua nama kontak  (SEARCH)
-    void displayAllContacts() const {
-        if (contacts.empty()) {
-            cout << "PhoneBook is empty.\n";
-            return;
+class PhoneBook{
+    private:
+        vector<Contact> contacts; // Daftar kontak berupa array yang menyimpan Class Contact
+        static int const maximumContacts = 8; // Maksimal konstan 8 kontak
+    public:
+        // Menambah kontak baru (ADD) ke array contacts
+        void addContact(string name, string address, string element, string weapon, string gender){
+            if (contacts.size() < maximumContacts){  // Jika jumlah kontak masih kurang dari maximumContacts
+                contacts.emplace_back(name, address, element, weapon, gender); // insert kontak di akhir vektor
+            }
+            else{
+                // Jika sudah penuh atau mencapai batas maks, ganti kontak di index pertama, lalu masukan kontak di akhir array
+                contacts.erase(contacts.begin());
+                contacts.emplace_back(name, address, element, weapon, gender);
+            }
+            cout << "Contact added successfully!\n";
         }
 
-        cout << "Contact List:\n";
-        for (size_t i = 0; i < contacts.size(); ++i) {
-            cout << i + 1 << ". " << contacts[i].getName() << endl;
+        // Menampilkan semua nama kontak  (SEARCH)
+        void displayAllContacts() const{
+            // Jika array kosong.
+            if (contacts.empty()){
+                cout << "PhoneBook is empty.\n";
+                return;
+            }
+            // Display semua array kontak, lalu getName() disetiap array contacts pada index i.
+            cout << "Contact List:\n";
+            for (int i = 0; i < contacts.size(); ++i){
+                cout << i + 1 << ". " << contacts[i].getName() << endl;
+            }
         }
-    }
 
-    // Menampilkan informasi detail kontak berdasarkan indeks (SEARCH)
-    void displayContactDetails(int index) const {
-        if (index < 1 || index > contacts.size()) {
-            cout << "Invalid contact number.\n";
-            return;
+        // Menampilkan Informasi detail kontak berdasarkan Index
+        void displayContactDetails(int index) const{
+            if (index < 1 || index > contacts.size()){
+                cout << "Invalid contact number.\n";
+                return;
+            }
+            contacts[index - 1].displayInfo();
         }
-        contacts[index - 1].displayInfo();
-    }
+        
+        // Menghapus semua kontak (EXIT)
+        void clearContacts(){
+            contacts.clear();
+            cout << "All contacts have been deleted.\n";
+        }
 
-    // Menghapus semua kontak (EXIT)
-    void clearContacts() {
-        contacts.clear();
-        cout << "All contacts have been deleted.\n";
-    }
+        vector<Contact> getContacts(){
+            return contacts;
+        }
+
 };
 
-// Fungsi utama
-int main() {
+
+int main(){
     PhoneBook phoneBook;
     int choice;
 
-    do {
+    do{
         cout << "\n=== PhoneBook Menu ===\n";
         cout << "1. Add Contact\n";
         cout << "2. Search Contacts\n";
@@ -92,39 +107,58 @@ int main() {
         cout << "Enter your choice: ";
         cin >> choice;
 
-        switch (choice) {
-        case 1: {
-            // Tambahkan kontak
-            string name, address, element;
-            cout << "Enter name: ";
-            cin.ignore(); // Mengatasi masalah newline
-            getline(cin, name);
-            cout << "Enter address: ";
-            getline(cin, address);
-            cout << "Enter element (Pyro, Cryo, etc.): ";
-            getline(cin, element);
+        switch (choice){
+            case 1:{
+                //  ADD kontak
+                string name, address, element, weapon, gender;
 
-            phoneBook.addContact(name, address, element);
-            break;
+                cout << "Enter name: ";
+                cin.ignore(); // Mengatasi masalah newline ketika ada spasi antar kata atau ada nama akhir (etc. Raiden Shogun)
+                getline(cin, name);
+                
+                cout << "Enter address: ";
+                getline(cin, address);
+
+                cout << "Enter element (Pyro, Havoc, Imaginary, etc.): ";
+                getline(cin, element);
+
+                cout << "Enter weapon: ";
+                getline(cin, weapon);
+
+                cout << "Enter gender: ";
+                getline(cin, gender);
+
+                phoneBook.addContact(name, address, element, weapon, gender);
+                break;
+            }
+
+            case 2:{
+                // SEARCH kontak
+                phoneBook.displayAllContacts();
+
+                // Jika PhoneBook kosong, berhentikan loop.
+                if (phoneBook.getContacts().size() == 0){
+                    break;
+                }
+
+                cout << "Enter the contact number to view details: ";    
+                int index;
+                cin >> index;
+                cout << '\n';
+
+                phoneBook.displayContactDetails(index);
+                  break;
+            }
+
+            case 3:{
+                phoneBook.clearContacts();
+                cout << "Exiting program...\n";
+                break;
+            }
+            default:
+                cout << "Invalid choice. Please try again.\n";
         }
-        case 2: {
-            // Cari kontak
-            phoneBook.displayAllContacts();
-            cout << "Enter the contact number to view details: ";
-            int index;
-            cin >> index;
-            phoneBook.displayContactDetails(index);
-            break;
-        }
-        case 3:
-            // Keluar dan hapus semua data
-            phoneBook.clearContacts();
-            cout << "Exiting program...\n";
-            break;
-        default:
-            cout << "Invalid choice. Please try again.\n";
-        }
+
     } while (choice != 3);
-
     return 0;
 }
